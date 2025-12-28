@@ -45,7 +45,6 @@ gradient_manifold<- function(mesh = NULL,
     V_vert = Vfield
   }
 
-  # Note:: replace this later
   # barycentric coordinates for the sample
   uX = coords$bary[, 1]
   vX = coords$bary[, 2]
