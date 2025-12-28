@@ -1,25 +1,9 @@
 
-# manifoldGPgrad
+# manifoldGPgrad: R-package for Bayesian inference on rates on change for spatial processes over compact Riemanian manifolds
 
-<!-- badges: start -->
-<!-- badges: end -->
+<img width="2468" height="586" alt="vector_fields_bunny_bl" src="https://github.com/user-attachments/assets/77ffdf64-a4b3-4851-b331-8df1dd078938" />
 
-The goal of manifoldGPgrad is to ...
+<img width="2710" height="1275" alt="bunny_sim-combined_scale" src="https://github.com/user-attachments/assets/f3d16059-1eef-4ff7-9f9c-62c7a8158152" />
 
-## Installation
 
-You can install the development version of manifoldGPgrad like so:
-
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
-```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-``` r
-library(manifoldGPgrad)
-## basic example code
-```
 
