@@ -25,7 +25,7 @@ gradient_manifold<- function(mesh = NULL,
   if(is.null(Vfield)){
     cat("Using x-axis as reference to generate vector field", "\n")
     Vcoords = t(mesh$vb[1:3, ])
-    F       = t(mesh$it)
+    F = t(mesh$it)
     ref = c(1, 0, 0) # x-axis
 
     # Tangent vector field
@@ -45,6 +45,7 @@ gradient_manifold<- function(mesh = NULL,
     V_vert = Vfield
   }
 
+  # Note:: replace this later
   # barycentric coordinates for the sample
   uX = coords$bary[, 1]
   vX = coords$bary[, 2]
@@ -66,13 +67,12 @@ gradient_manifold<- function(mesh = NULL,
   N = nrow(coords$bary) # sample size
   k = length(lambda) # discrete approx.
   nmcmc = length(model$alpha) # number of samples
-  ngrid = nrow(grid$points) # number of grid points
+  ngrid = nrow(grid$points)
 
   # posterior estimates of parameters
   alpha.mc = model$alpha
   z.mc = model$z
   sig2.mc = model$sig2
-  nu = model$nu
 
   grad.samples.grid = matrix(NA, nmcmc, ngrid)
 
@@ -152,16 +152,21 @@ gradient_manifold<- function(mesh = NULL,
         grad.samples.grid[i.mcmc, j] = rnorm(1, mu.grad, sqrt(Sigma.grad))
       }
     }
+    if(i.mcmc %% 100 == 0){
+      if(i.mcmc == 100) cat("Iteration", i.mcmc, "...", "\t")
+      else cat(i.mcmc, "...", "\t")
+    }
   }
   # Posterior inference
   grad_ci =  t(apply(grad.samples.grid, 2, quantile, probs = c(0.5, 0.025, 0.975)))
 
   # Gradient Object
   gp_grad_est_obj = list(points = grid$points,
-                         values = grad_ci,
+                         values = grad_ci[,1],
                          tri_idx = grid$tri_idx,
                          bary = grid$bary)
 
-  return(grad.mc = grad.samples.grid,
-         gp_grad_est_obj = gp_grad_est_obj)
+  return(list(grad.mc = grad.samples.grid,
+              grad_ci = grad_ci,
+              gp_grad_est_obj = gp_grad_est_obj))
 }
