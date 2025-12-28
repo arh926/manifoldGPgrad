@@ -1,5 +1,6 @@
 
-# manifoldGPgrad: R-package for Bayesian inference on rates on change for spatial processes over compact Riemanian manifolds
+# manifoldGPgrad
+## R-package for Bayesian inference on rates on change for spatial processes over compact Riemanian manifolds
 
 <img width="2468" height="586" alt="vector_fields_bunny_bl" src="https://github.com/user-attachments/assets/77ffdf64-a4b3-4851-b331-8df1dd078938" />
 
