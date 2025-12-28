@@ -6,6 +6,7 @@
 #' @param b \eqn{3 \times 1} vector.
 #' @returns a \eqn{3 \times 1} vector. For internal use only.
 #' @keywords cross
+#' @author Aritra Halder <aritra.halder@drexel.edu>
 #' @export
 cross <- function(a = NULL,
                   b = NULL) {

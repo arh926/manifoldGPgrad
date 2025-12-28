@@ -4,20 +4,19 @@ Title: What the Package Does (Title Case)
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Aritra", "Halder",
+      email = "aritra.halder@drexel.edu",
       role = c("aut", "cre")
     )
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
+Description: Bayesian infrerence on spatial processes and rates of change (gradients) on Riemannian manifolds.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
+    Matrix,
+    Rvcg,
     future,
     future.apply,
-    Matrix,
-    MBA,
-    rgl,
-    Rvcg
+    parallel
+RoxygenNote: 7.3.3

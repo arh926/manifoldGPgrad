@@ -6,6 +6,7 @@
 #' @param F \eqn{N_T \times 3} matrix containing vertex indices forming triangular faces
 #' @returns a scalar for the area of a triangle. For internal use.
 #' @keywords triangle_areas
+#' @author Aritra Halder <aritra.halder@drexel.edu>
 #' @export
 triangle_areas <- function(V, F) {
   # V: n x 3, F: m x 3
