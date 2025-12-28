@@ -34,12 +34,10 @@ spsample <- function(mesh = NULL,
 
   ncores <- detectCores() - 1
   samp.list <- split(1:niter, ceiling(seq_along(1:niter)/(niter/ncores)))
-  # parallel.index <- 1:ncores
-  # browser()
 
   plan(multisession, workers = ncores)
   z.beta.list = future_lapply(samp.list, function(x){
-    id.x = x # samp.list[[x]]
+    id.x = x
     n.x = length(id.x)
 
     z.mcmc = matrix(0, ncol = N, nrow = n.x)
