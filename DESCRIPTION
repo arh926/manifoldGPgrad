@@ -1,6 +1,6 @@
 Package: manifoldGPgrad
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Bayesian inference for spatial processes and rates of change (gradients) on compact Riemannian manifolds
 Version: 0.1.0
 Authors@R: c(
     person(
@@ -9,12 +9,13 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Bayesian infrerence on spatial processes and rates of change (gradients) on Riemannian manifolds.
+Description: Statistical inference on the associated rates of change has seen some recent developments. Modern spatial data often arise from non-Euclidean domains. This R-package particularly considers spatial processes defined over compact Riemannian manifolds. We develop a computational framework for spatial rates of change for such processes over vector fields. Predictive inference on these rates is devised conditioned on the realized process over the manifold. Manifolds arise as polyhedral meshes in practice. We use a fully Bayesian hierarchical model-based approach to inference on the differential processes for a spatial process over a manifold from partially realized data. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
     Matrix,
+    gsl,
     Rvcg,
     future,
     future.apply,

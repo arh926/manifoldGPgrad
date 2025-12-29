@@ -2,7 +2,7 @@
 % Please edit documentation in R/spsample.R
 \name{spsample}
 \alias{spsample}
-\title{Posterior samples of sptaial effects and intercept}
+\title{Posterior samples of spatial effects and intercept}
 \usage{
 spsample(
   mesh = NULL,

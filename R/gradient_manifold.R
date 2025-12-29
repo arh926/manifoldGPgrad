@@ -73,6 +73,7 @@ gradient_manifold<- function(mesh = NULL,
   alpha.mc = model$alpha
   z.mc = model$z
   sig2.mc = model$sig2
+  nu = model$nu
 
   grad.samples.grid = matrix(NA, nmcmc, ngrid)
 

@@ -1,12 +1,9 @@
-#' Spatial Bayesian Hierarchical model for compact Riemanian manifolds
+#' Hierarchial spatial model for the 2-sphere
 #'
-#' Fits the Bayesian hierarchical model, \eqn{Y(x)=\beta_0 + Z(x) + \epsilon(x)}, \eqn{x=(x^1,x^2,x^3)\in\mathcal{M}}, where \eqn{\mathcal{M}} is a compact Riemanian manifold using a collapsed Metropolis-Hastings sampler yielding posterior Markov Chain Monte Carlo (MCMC) samples.
+#' Function that fits the hierarchical maodel, \eqn{Y(x)=\beta_0+Z(x)+\epsilon(x)}, \eqn{Z(x)\sim GP(0, K(\cdot;\sigma^2,\alpha))}, and \eqn{\epsilon(x)\sim N(0,\tau^2)}.
 #'
-#' @param mesh a mesh in polygon file format imported using `vcgPlyRead()` of class `mesh3d`.
-#' @param y a \eqn{N\times 1} vector of the observed realizations
-#' @param samp list containing barycentric coordinates of \eqn{N} sampled irregular locations, IDs for triangle vertices
-#' @param lambda truncated vector of eigen-values
-#' @param phi truncated \eqn{N\times T} matrix of eigen functions
+#' @param y observed process
+#' @param coords observed locations
 #' @param niter optional; number of MCMC iterations, defaults to 5000
 #' @param nburn optional; number of MCMC burn-in, defaults to 2500
 #' @param report optional; MCMC batch length, defaults to 100
@@ -14,23 +11,27 @@
 #' @param b.v optional; hyperparameter for the scale of the inverse-gamma prior on total variance, defaults to 2
 #' @param lower.alpha optional; hyperparameter for the lower bound for the uniform prior on the length scale parameter, defaults to 0.01
 #' @param upper.alpha optional; hyperparameter for the upper bound for the uniform prior on the length scale parameter, defaults to 30
-#' @param nu optional; value of the smoothness/fractal parameter, defaults to 2
+#' @param nu optional; value of the smoothness/fractal parameter, defaults to 1.5
+#' @param Lmax optinal; truncation for the Legendre-Matern covariance, defaults to 30
 #' @param verbose logical; if TRUE prints inference
 #' @param digits optional; precision of print output, defaults to 3 digits
 #' @returns A list of the observed process, sampled locations, fractal parameter, posterior post burn-in samples for \eqn{\sigma^2, \tau^2, \alpha}.
 #' @importFrom stats median quantile rnorm
 #' @author Aritra Halder <aritra.halder@drexel.edu>
 #' @export
-bayes_sp_manifold <- function(mesh = NULL,
-                              lambda = NULL, phi = NULL,
-                              y = NULL,
-                              samp = NULL, # (x, y, z) sphere points
-                              niter = NULL, nburn = NULL, report = NULL,
-                              a.v = NULL, b.v = NULL,
-                              lower.alpha = NULL, upper.alpha = NULL,
-                              nu = NULL, # smoothness parameter is fixed for now
-                              verbose = TRUE,
-                              digits = 3){
+##########################################################
+### Collapsed MH Sampler for Spatial Process on Sphere ###
+##########################################################
+# Re-parameterized version due to identifiability issues with sig2 and alpha
+sphere_bayes_sp <- function(y = NULL,
+                            coords = NULL, # (x, y, z) sphere points
+                            niter = NULL, nburn = NULL, report = NULL,
+                            a.v = NULL, b.v = NULL,
+                            lower.alpha = NULL, upper.alpha = NULL,
+                            nu = 1.5, # smoothness parameter is fixed for now
+                            Lmax = 30,
+                            verbose = TRUE,
+                            digits = 3){
   # some housekeeping
   N = length(y)
   # MCMC parameters
@@ -41,8 +42,8 @@ bayes_sp_manifold <- function(mesh = NULL,
   }
 
   if(is.null(nu)){
-    nu = 2
-    print("Fitting with nu = 2...")
+    nu = 1.5
+    print("Fitting with nu = 1.5...")
   }
 
   # learning rates
@@ -67,11 +68,11 @@ bayes_sp_manifold <- function(mesh = NULL,
   res_v = res_alpha = res_rho = rep(0, niter)
   accept_m = c()
 
+  # Compute polynomials once
+  Pl = legendre_Pl_list(coords = coords, Lmax = Lmax)
+
   In = diag(N)
-  R = matern_cov_mp(mesh = mesh, samp = samp,
-                    lambda = lambda, phi = phi,
-                    nu = nu, alpha = alpha,
-                    d = 2, cor = TRUE)
+  R = legendreM(nu = nu, alpha = alpha, P_l = Pl)
 
   Sigma = v * (rho * R + (1 - rho) * In)
   chol.Sigma = chol(Sigma)
@@ -91,21 +92,14 @@ bayes_sp_manifold <- function(mesh = NULL,
     lv.draw = log(v) + e.v * rnorm(1) # log-normal proposal
 
     Sigma.draw = exp(lv.draw) * (rho * R + (1 - rho) * In)
-    chol.Sigma.draw = try(chol(Sigma.draw), silent = TRUE)
+    chol.Sigma.draw = chol(Sigma.draw)
+    inv.Sigma.draw = chol2inv(chol.Sigma.draw)
 
+    r = -b.v * (exp(-lv.draw) - 1/v) - (a.v + 1) * (lv.draw - log(v)) -
+      crossprod(t(crossprod(y, (inv.Sigma.draw - inv.Sigma))), y)/2 -
+      sum(log(diag(chol.Sigma.draw)/diag(chol.Sigma)))
 
-    if("try-error" %in% class(chol.Sigma.draw)){
-      accept.prob = -Inf
-    }else{
-
-      inv.Sigma.draw = chol2inv(chol.Sigma.draw)
-      r = -b.v * (exp(-lv.draw) - 1/v) - (a.v + 1) * (lv.draw - log(v)) -
-        crossprod(t(crossprod(y, (inv.Sigma.draw - inv.Sigma))), y)/2 -
-        sum(log(diag(chol.Sigma.draw)/diag(chol.Sigma)))
-
-      accept.prob = min(r, 0)
-
-    }
+    accept.prob = min(r, 0)
 
     if(log(runif(1)) < accept.prob){
       v = exp(lv.draw)
@@ -129,19 +123,14 @@ bayes_sp_manifold <- function(mesh = NULL,
     else{
 
       Sigma.draw = v * (exp(lrho.draw) * R + (1 - exp(lrho.draw)) * In)
-      chol.Sigma.draw = try(chol(Sigma.draw), silent = TRUE)
+      chol.Sigma.draw = chol(Sigma.draw)
+      inv.Sigma.draw = chol2inv(chol.Sigma.draw)
 
+      r = (lrho.draw - log(rho)) -
+        crossprod(t(crossprod(y, (inv.Sigma.draw - inv.Sigma))), y)/2 -
+        sum(log(diag(chol.Sigma.draw)/diag(chol.Sigma)))
 
-      if("try-error" %in% class(chol.Sigma.draw)){
-        accept.prob = -Inf
-      }else{
-        inv.Sigma.draw = chol2inv(chol.Sigma.draw)
-        r = (lrho.draw - log(rho)) -
-          crossprod(t(crossprod(y, (inv.Sigma.draw - inv.Sigma))), y)/2 -
-          sum(log(diag(chol.Sigma.draw)/diag(chol.Sigma)))
-
-        accept.prob = min(r, 0)
-      }
+      accept.prob = min(r, 0)
 
     }
 
@@ -169,25 +158,17 @@ bayes_sp_manifold <- function(mesh = NULL,
     if((exp(lalpha.draw) < lower.alpha) | (exp(lalpha.draw) > upper.alpha)) accept.prob = -Inf
     else{
 
-      R.draw = matern_cov_mp(mesh = mesh, samp = samp,
-                             lambda = lambda, phi = phi,
-                             nu = nu, alpha = exp(lalpha.draw),
-                             d = 2, cor = TRUE) #
+      R.draw = legendreM(nu = nu, alpha = exp(lalpha.draw), P_l = Pl)
 
       Sigma.draw = v * (rho * R.draw + (1 - rho) * In)
-      chol.Sigma.draw = try(chol(Sigma.draw), silent = TRUE)
+      chol.Sigma.draw = chol(Sigma.draw)
+      inv.Sigma.draw = chol2inv(chol.Sigma.draw)
 
+      r = (lalpha.draw - log(alpha)) - crossprod(t(crossprod(y, (inv.Sigma.draw - inv.Sigma))), y)/2 -
+        sum(log(diag(chol.Sigma.draw)/diag(chol.Sigma)))
 
-      if("try-error" %in% class(chol.Sigma.draw)){
-        accept.prob = -Inf
-      }else{
-        inv.Sigma.draw = chol2inv(chol.Sigma.draw)
-        r = (lalpha.draw - log(alpha)) - crossprod(t(crossprod(y, (inv.Sigma.draw - inv.Sigma))), y)/2 -
-          sum(log(diag(chol.Sigma.draw)/diag(chol.Sigma)))
+      accept.prob = min(r, 0)
 
-        accept.prob = min(r, 0)
-
-      }
     }
 
 
@@ -255,7 +236,7 @@ bayes_sp_manifold <- function(mesh = NULL,
   }
 
   return(list(y = y,
-              samp = samp,
+              coords = coords,
               # trgt_fn = c(trgtFn.init, trgtFn),
               nu = nu,
               sig2 = res_v[(nburn + 1):niter] * res_rho[(nburn + 1):niter],

@@ -1,16 +1,14 @@
 #' Posterior samples of spatial effects and intercept
 #'
-#' Uses posterior Markov Chain Monte Carlo (MCMC) samples of \eqn{\sigma^2}, \eqn{\tau^2} and \eqn{\alpha} to obtain samples for \eqn{Z(x)} and \eqn{\beta_0}.
+#' Uses posterior Markov Chain Monte Carlo (MCMC) samples of \eqn{\sigma^2}, \eqn{\tau^2} and \eqn{\alpha} to obtain samples for \eqn{Z(x)} and \eqn{\beta_0} for the 2-sphere partcularly.
 #'
-#' @param mesh a mesh in polygon file format imported using `vcgPlyRead()` of class `mesh3d`.
 #' @param y a \eqn{N\times 1} vector of the observed realizations
-#' @param samp list containing barycentric coordinates of \eqn{N} sampled irregular locations, IDs for triangle vertices
-#' @param lambda truncated vector of eigen-values
-#' @param phi truncated \eqn{N\times T} matrix of eigen functions
-#' @param alpha posterior MCMC samples for \eqn{\alpha} from fitting `bayes_sp_manifold()`
-#' @param sig2 posterior MCMC samples for \eqn{\sigma^2} from fitting `bayes_sp_manifold()`
-#' @param tau2 posterior MCMC samples for \eqn{\tau^2} from fitting `bayes_sp_manifold()`
-#' @param nu value of the smoothness/fractal parameter, should be same as that used for `bayes_sp_manifold()`
+#' @param coords coordinates of \eqn{N} sampled locations
+#' @param alpha posterior MCMC samples for \eqn{\alpha} from fitting `bayes_sphere_sp()`
+#' @param sig2 posterior MCMC samples for \eqn{\sigma^2} from fitting `bayes_sphere_sp()`
+#' @param tau2 posterior MCMC samples for \eqn{\tau^2} from fitting `bayes_sphere_sp()`
+#' @param nu value of the smoothness/fractal parameter, should be same as that used for `bayes_sphere_sp()`
+#' @param Lmax optional; truncation level for the Legendre-Matern covariance, defaults to 30
 #' @param silent logical; if TRUE does not print inference
 #' @returns A list of posterior samples for \eqn{Z(x)} and \eqn{\beta_0}.
 #' @importFrom parallel detectCores
@@ -18,22 +16,24 @@
 #' @importFrom future.apply future_lapply
 #' @author Aritra Halder <aritra.halder@drexel.edu>
 #' @export
-spsample <- function(mesh = NULL,
-                     lambda = NULL,
-                     phi = NULL,
-                     y = NULL,
-                     samp = NULL,
-                     alpha = NULL,
-                     sig2 = NULL,
-                     tau2 = NULL,
-                     nu = NULL,
-                     silent = TRUE){
+spsample_sphere <- function(y = NULL,
+                            coords = NULL,
+                            alpha = NULL,
+                            sig2 = NULL,
+                            tau2 = NULL,
+                            nu = NULL,
+                            Lmax = 30,
+                            silent = TRUE){
   N = length(y)
 
   niter = length(alpha)
 
+  # Compute polynomials once
+  Pl = legendre_Pl_list(coords = coords, Lmax = Lmax)
+
   ncores <- detectCores() - 1
   samp.list <- split(1:niter, ceiling(seq_along(1:niter)/(niter/ncores)))
+  parallel.index <- 1:ncores
 
   plan(multisession, workers = ncores)
   z.beta.list = future_lapply(samp.list, function(x){
@@ -48,12 +48,8 @@ spsample <- function(mesh = NULL,
     tau2.x = tau2[id.x]
 
     for(i in 1:n.x){
-      R.Z = matern_cov_mp(mesh = mesh, samp = samp,
-                          lambda = lambda, phi = phi,
-                          nu = nu, alpha = alpha.x[i],
-                          d = 2, cor = TRUE)
-      R.inv.Z = try(chol2inv(chol(R.Z)), silent = TRUE)
-      if("try-error" %in% class(R.inv.Z)) R.inv.Z = chol2inv(chol(R.Z + diag(N)))
+      R.Z = legendreM(nu = nu, alpha = alpha.x[i], P_l = Pl)
+      R.inv.Z = chol2inv(chol(R.Z))
 
       ######################
       # Gibbs Update for Z #
