@@ -13,7 +13,7 @@ Below are some examples of what it generates.
 ## Spatial Process Modeling and inference for gradients on the 2-sphere 
 <img width="3228" height="1275" alt="sphere_sim-combined_scale" src="https://github.com/user-attachments/assets/f1c6f6ee-04bf-4e5d-a346-55d6c2555c07" />
 
-## Vector Fields fro Directional Derivatvies
+## Vector Fields for Directional Derivatives
 <img width="2468" height="586" alt="vector_fields_bunny_bl" src="https://github.com/user-attachments/assets/77ffdf64-a4b3-4851-b331-8df1dd078938" />
 
 ## Spatial Process Modeling and inference for gradients on the Stanford Bunny
