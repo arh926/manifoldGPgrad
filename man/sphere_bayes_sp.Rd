@@ -2,7 +2,7 @@
 % Please edit documentation in R/sphere_bayes_sp.R
 \name{sphere_bayes_sp}
 \alias{sphere_bayes_sp}
-\title{Hierarchial spatial model for the 2-sphere}
+\title{Spatial Bayesian Hierarchical model for the 2-sphere}
 \usage{
 sphere_bayes_sp(
   y = NULL,
@@ -51,7 +51,7 @@ sphere_bayes_sp(
 A list of the observed process, sampled locations, fractal parameter, posterior post burn-in samples for \eqn{\sigma^2, \tau^2, \alpha}.
 }
 \description{
-Function that fits the hierarchical maodel, \eqn{Y(x)=\beta_0+Z(x)+\epsilon(x)}, \eqn{Z(x)\sim GP(0, K(\cdot;\sigma^2,\alpha))}, and \eqn{\epsilon(x)\sim N(0,\tau^2)}.
+Function that fits the hierarchical model, \eqn{Y(x)=\beta_0+Z(x)+\epsilon(x)}, \eqn{Z(x)\sim GP(0, K(\cdot;\sigma^2,\alpha))}, and \eqn{\epsilon(x)\sim N(0,\tau^2)}. Here \eqn{K} is specifically the truncated Legendre-Matern kernel.
 }
 \author{
 Aritra Halder <aritra.halder@drexel.edu>

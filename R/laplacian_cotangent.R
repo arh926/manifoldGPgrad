@@ -4,7 +4,7 @@
 #'
 #' @param mesh a mesh in polygon file format imported using `vcgPlyRead()` of class `mesh3d`.
 #' @returns a sparse cotangent Laplacian matrix.
-#' @importFrom Matrix sparseMatrix Diagonal
+#' @importFrom Matrix sparseMatrix Diagonal t rowSums
 #' @keywords laplacian_cotangent
 #' @author Aritra Halder <aritra.halder@drexel.edu>
 #' @export

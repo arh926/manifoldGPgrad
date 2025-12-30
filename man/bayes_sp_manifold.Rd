@@ -2,7 +2,7 @@
 % Please edit documentation in R/bayes_sp_manifold.R
 \name{bayes_sp_manifold}
 \alias{bayes_sp_manifold}
-\title{Spatial Bayesian Hierarchical model for compact Riemanian manifolds}
+\title{Spatial Bayesian Hierarchical model for compact Riemannian manifolds}
 \usage{
 bayes_sp_manifold(
   mesh = NULL,
@@ -57,7 +57,7 @@ bayes_sp_manifold(
 A list of the observed process, sampled locations, fractal parameter, posterior post burn-in samples for \eqn{\sigma^2, \tau^2, \alpha}.
 }
 \description{
-Fits the Bayesian hierarchical model, \eqn{Y(x)=\beta_0 + Z(x) + \epsilon(x)}, \eqn{x=(x^1,x^2,x^3)\in\mathcal{M}}, where \eqn{\mathcal{M}} is a compact Riemanian manifold using a collapsed Metropolis-Hastings sampler yielding posterior Markov Chain Monte Carlo (MCMC) samples.
+Fits the Bayesian hierarchical model, \eqn{Y(x)=\beta_0 + Z(x) + \epsilon(x)}, \eqn{x=(x^1,x^2,x^3)\in\mathcal{M}}, where \eqn{\mathcal{M}} is a compact Riemanian manifold. Priors are \eqn{Z(x)\sim GP(0, K(\cdot;\sigma^2,\alpha))}, and \eqn{\epsilon(x)\sim N(0,\tau^2)}. It uses a collapsed Metropolis-Hastings sampler yielding posterior Markov Chain Monte Carlo (MCMC) samples.
 }
 \author{
 Aritra Halder <aritra.halder@drexel.edu>

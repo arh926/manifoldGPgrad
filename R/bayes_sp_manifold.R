@@ -1,6 +1,6 @@
-#' Spatial Bayesian Hierarchical model for compact Riemanian manifolds
+#' Spatial Bayesian Hierarchical model for compact Riemannian manifolds
 #'
-#' Fits the Bayesian hierarchical model, \eqn{Y(x)=\beta_0 + Z(x) + \epsilon(x)}, \eqn{x=(x^1,x^2,x^3)\in\mathcal{M}}, where \eqn{\mathcal{M}} is a compact Riemanian manifold using a collapsed Metropolis-Hastings sampler yielding posterior Markov Chain Monte Carlo (MCMC) samples.
+#' Fits the Bayesian hierarchical model, \eqn{Y(x)=\beta_0 + Z(x) + \epsilon(x)}, \eqn{x=(x^1,x^2,x^3)\in\mathcal{M}}, where \eqn{\mathcal{M}} is a compact Riemanian manifold. Priors are \eqn{Z(x)\sim GP(0, K(\cdot;\sigma^2,\alpha))}, and \eqn{\epsilon(x)\sim N(0,\tau^2)}. It uses a collapsed Metropolis-Hastings sampler yielding posterior Markov Chain Monte Carlo (MCMC) samples.
 #'
 #' @param mesh a mesh in polygon file format imported using `vcgPlyRead()` of class `mesh3d`.
 #' @param y a \eqn{N\times 1} vector of the observed realizations

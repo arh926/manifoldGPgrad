@@ -1,6 +1,6 @@
-#' Hierarchial spatial model for the 2-sphere
+#' Spatial Bayesian Hierarchical model for the 2-sphere
 #'
-#' Function that fits the hierarchical maodel, \eqn{Y(x)=\beta_0+Z(x)+\epsilon(x)}, \eqn{Z(x)\sim GP(0, K(\cdot;\sigma^2,\alpha))}, and \eqn{\epsilon(x)\sim N(0,\tau^2)}.
+#' Function that fits the hierarchical model, \eqn{Y(x)=\beta_0+Z(x)+\epsilon(x)}, \eqn{Z(x)\sim GP(0, K(\cdot;\sigma^2,\alpha))}, and \eqn{\epsilon(x)\sim N(0,\tau^2)}. Here \eqn{K} is specifically the truncated Legendre-Matern kernel.
 #'
 #' @param y observed process
 #' @param coords observed locations
