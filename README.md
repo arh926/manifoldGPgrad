@@ -55,7 +55,6 @@ options(rgl.printRglwidget = TRUE)
 require(Rvcg)
 require(rgl)
 require(ggplot2)
-require(MASS)
 require(Matrix)
 require(manifoldGPgrad)
 
