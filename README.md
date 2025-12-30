@@ -3,6 +3,15 @@
 ## R-package for Bayesian inference on rates on change for spatial processes over compact Riemanian manifolds
 Statistical inference on the rates of change of spatial processes has seen some recent developments. Modern spatial data often arise from non-Euclidean domains. This R-package particularly considers spatial processes defined over compact Riemannian manifolds. We develop a computational framework for spatial rates of change for such processes over vector fields. Predictive inference on these rates is devised conditioned on the realized process over the manifold. Manifolds arise as polyhedral meshes in practice. We use a fully Bayesian hierarchical model-based approach to inference on the differential processes for a spatial process over a manifold from partially realized data. 
 
+### Package Structure:
+R/: contains required subroutines for spatial modeling and inference with clear documentation for each function and their arguments
+
+inst/extdata: contains the mesh files for the bunny. Load it like so, after installing the package: 
+
+```{r}
+bunny_path = system.file("extdata", "bun_zipper_res4.ply", package = "manifoldGPgrad")
+```
+
 Install the package like so:
 
 ```{r}
