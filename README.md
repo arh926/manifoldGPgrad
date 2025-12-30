@@ -8,13 +8,13 @@ R/: contains required subroutines for spatial modeling and inference with clear 
 
 inst/extdata: contains the mesh files for the bunny. Load it like so, after installing the package: 
 
-```{r}
+``` r
 bunny_path = system.file("extdata", "bun_zipper_res4.ply", package = "manifoldGPgrad")
 ```
 
 Install the package like so:
 
-```{r}
+``` r
 devtools::install_github("arh926/manifoldGPgrad")
 ```
 Below are some examples of what it generates.
@@ -30,7 +30,7 @@ Below are some examples of what it generates.
 
 Below are example working scripts that help in reproducing the analysis:
 
-```{r}
+``` r
 ############################################
 # A plotting function to visualize results #
 ############################################
