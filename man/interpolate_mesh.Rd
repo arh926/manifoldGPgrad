@@ -2,11 +2,11 @@
 % Please edit documentation in R/interpolate_mesh.R
 \name{interpolate_mesh}
 \alias{interpolate_mesh}
-\title{Interpolate on compact Riemanian manifolds}
+\title{Surface registration on a compact Riemannian manifold from scattered data}
 \usage{
 interpolate_mesh(
   mesh = NULL,
-  gp_sample = NULL,
+  sample = NULL,
   tau_noise = 0.01,
   lambda_smooth = 0.01,
   method = c("heat kernel", "spline")
@@ -15,11 +15,11 @@ interpolate_mesh(
 \arguments{
 \item{mesh}{a mesh in polygon file format imported using `vcgPlyRead()` of class `mesh3d`.}
 
-\item{gp_sample}{a list containing funciton values, IDs of triangle vertices for observed locations, barycentric coordinates (obtained from `sample_points_mesh()`)}
+\item{sample}{a list containing function values, IDs of triangle vertices for observed locations, barycentric coordinates (obtained from `sample_points_mesh()`)}
 
-\item{tau_noise}{regularization parameter for heat-kernel (should be small defaults to 0.01)}
+\item{tau_noise}{optional; regularization parameter for heat-kernel (should be small defaults to 0.01)}
 
-\item{lambda_smooth}{penalty parameter for splinel (should be small defaults to 0.001)}
+\item{lambda_smooth}{optional; penalty parameter for spline (should be small defaults to 0.001)}
 
 \item{method}{choice between: heat kernel and spline}
 }
@@ -27,7 +27,7 @@ interpolate_mesh(
 a vector of interpolated realizations on the mesh
 }
 \description{
-Function to smoothly interpolate realizations over the mesh using either heat kernel or surface splines.
+Function to smoothly interpolate realizations over the mesh using either heat kernel or surface splines. The interpolation is done for scattered or patially observed data on the manifold.
 }
 \author{
 Aritra Halder <aritra.halder@drexel.edu>

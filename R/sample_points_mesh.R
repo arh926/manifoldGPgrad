@@ -4,7 +4,7 @@
 #'
 #' @param mesh a mesh in polygon file format imported using `vcgPlyRead()` of class `mesh3d`.
 #' @param npoints number of samples points.
-#' @returns A list containing a matrix of npoints x 3 points, IDs of vertices forming triangles the barycentric coordinates
+#' @returns A list containing a matrix of npoints x 3 points, IDs of vertices forming triangles and the barycentric coordinates
 #' @importFrom stats runif
 #' @author Aritra Halder <aritra.halder@drexel.edu>
 #' @export
@@ -14,7 +14,7 @@ sample_points_mesh <- function(mesh = NULL,
   V = t(mesh$vb[1:3, ])
   F = t(mesh$it)
 
-  areas = triangle_areas(V, F)
+  areas = triangle_areas(V = V, F = F)
   probs = areas / sum(areas)
 
   # sample triangles by area

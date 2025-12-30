@@ -1,17 +1,18 @@
-#' Interpolate on compact Riemanian manifolds
+#' Surface registration on a compact Riemannian manifold from scattered data
 #'
-#' Function to smoothly interpolate realizations over the mesh using either heat kernel or surface splines.
+#' Function to smoothly interpolate realizations over the mesh using either heat kernel or surface splines. The interpolation is done for scattered or patially observed data on the manifold.
+#'
 #' @param mesh a mesh in polygon file format imported using `vcgPlyRead()` of class `mesh3d`.
-#' @param gp_sample a list containing funciton values, IDs of triangle vertices for observed locations, barycentric coordinates (obtained from `sample_points_mesh()`)
-#' @param tau_noise regularization parameter for heat-kernel (should be small defaults to 0.01)
-#' @param lambda_smooth penalty parameter for splinel (should be small defaults to 0.001)
+#' @param sample a list containing function values, IDs of triangle vertices for observed locations, barycentric coordinates (obtained from `sample_points_mesh()`)
+#' @param tau_noise optional; regularization parameter for heat-kernel (should be small defaults to 0.01)
+#' @param lambda_smooth optional; penalty parameter for spline (should be small defaults to 0.001)
 #' @param method choice between: heat kernel and spline
 #' @returns a vector of interpolated realizations on the mesh
 #' @keywords interpolate_mesh
 #' @author Aritra Halder <aritra.halder@drexel.edu>
 #' @export
 interpolate_mesh <- function(mesh = NULL,
-                             gp_sample = NULL,
+                             sample = NULL,
                              tau_noise = 0.01, # set for heat kernel
                              lambda_smooth = 1e-2, # set for spline
                              method = c("heat kernel", "spline")){
@@ -22,19 +23,19 @@ interpolate_mesh <- function(mesh = NULL,
 
   n = nrow(L)
 
-  v1_idx = F[gp_sample$tri_idx,1]
-  v2_idx = F[gp_sample$tri_idx,2]
-  v3_idx = F[gp_sample$tri_idx,3]
+  v1_idx = F[sample$tri_idx,1]
+  v2_idx = F[sample$tri_idx,2]
+  v3_idx = F[sample$tri_idx,3]
 
   # These scatter values to mesh vertices
   f_vert = numeric(n)
   wt_vert = numeric(n)
 
-  for (i in seq_along(gp_sample$values)) {
-    f_val = gp_sample$values[i]
-    u = gp_sample$bary[i,1]
-    v = gp_sample$bary[i,2]
-    w = gp_sample$bary[i,3]
+  for (i in seq_along(sample$values)) {
+    f_val = sample$values[i]
+    u = sample$bary[i,1]
+    v = sample$bary[i,2]
+    w = sample$bary[i,3]
 
     f_vert[v1_idx[i]] = f_vert[v1_idx[i]] + u * f_val
     f_vert[v2_idx[i]] = f_vert[v2_idx[i]] + v * f_val

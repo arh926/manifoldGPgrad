@@ -12,7 +12,7 @@ sample_points_mesh(mesh = NULL, npoints = NULL)
 \item{npoints}{number of samples points.}
 }
 \value{
-A list containing a matrix of npoints x 3 points, IDs of vertices forming triangles the barycentric coordinates
+A list containing a matrix of npoints x 3 points, IDs of vertices forming triangles and the barycentric coordinates
 }
 \description{
 Obtains a sample of scattered locations on a triangulear mesh.
