@@ -28,7 +28,7 @@ Below are some examples of what it generates.
 ## Spatial Process Modeling and inference for gradients on the Stanford Bunny
 <img width="2710" height="1275" alt="bunny_sim-combined_scale" src="https://github.com/user-attachments/assets/f3d16059-1eef-4ff7-9f9c-62c7a8158152" />
 
-Below are example working scripts that help in reproducing the analysis:
+Below is an example working script that helps in reproducing the analysis for the Stanford Bunny. The 2-sphere works similarly.
 
 ``` r
 ############################################
