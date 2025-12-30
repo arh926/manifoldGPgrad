@@ -266,6 +266,6 @@ ggplot(final, aes(x = est, y = true)) +
   )
 
 ```
-
+For questions and bugs, please reach out to: [Email Me](mailto:your.email@example.com)
 
 
