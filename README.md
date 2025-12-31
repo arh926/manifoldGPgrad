@@ -227,15 +227,20 @@ N_grid = N_grid/sqrt(rowSums(N_grid^2))
 
 
 # True Gradient in Ambient space
+# Dimension: N_grid x 3
 grad_m_grid = cbind(30 * pi * cos(3 * pi * grid$points[,1]),
                      30 * pi * cos(3 * pi * grid$points[,2]),
-                     30 * pi * cos(3 * pi * grid$points[,3]))  # Ngrid x 3
+                     30 * pi * cos(3 * pi * grid$points[,3])) 
 
 dotgN = rowSums(grad_m_grid * N_grid)
 grad_m_tan = grad_m_grid - dotgN * N_grid
-
-V_tan = V_grid - rowSums(V_grid * N_grid) * N_grid
-V_tan = V_tan/sqrt(rowSums(V_tan^2))
+##################
+# Want to be extra safe: V_vert is already in T_xM,
+# can do the next couple lines
+# then, everything is projected to T_xM
+##################
+# V_tan = V_grid - rowSums(V_grid * N_grid) * N_grid
+# V_tan = V_tan/sqrt(rowSums(V_tan^2))
 
 true_grad = rowSums(grad_m_tan * V_grid)
 
