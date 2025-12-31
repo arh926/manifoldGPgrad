@@ -1,10 +1,10 @@
 
 # manifoldGPgrad
 ## R-package for Bayesian inference on rates on change for spatial processes over compact Riemanian manifolds
-Statistical inference on the rates of change of spatial processes has seen some recent developments. Modern spatial data often arise from non-Euclidean domains. This R-package particularly considers spatial processes defined over compact Riemannian manifolds. We develop a computational framework for spatial rates of change for such processes over vector fields. Predictive inference on these rates is devised conditioned on the realized process over the manifold. Manifolds arise as polyhedral meshes in practice. We use a fully Bayesian hierarchical model-based approach to inference on the differential processes for a spatial process over a manifold from partially realized data. 
+Statistical inference on the rates of change of spatial processes has seen some recent developments. Modern spatial data often arise from non-Euclidean domains. This R-package particularly considers spatial processes defined over compact Riemannian manifolds. We develop a computational framework for spatial rates of change for such processes over vector fields. Predictive inference on these rates is devised conditioned on the realized process over the manifold. Manifolds arise as polyhedral meshes in practice. We use a fully Bayesian hierarchical model-based approach to inference on the differential processes for a spatial process over a manifold from partially realized data. For questions and bugs, please reach out to: [Email Me](mailto:ah3758@drexel.edu)
 
 ### Package Structure:
-R/: contains required subroutines for spatial modeling and inference with clear documentation for each function and their arguments
+R/: contains required subroutines for spatial modeling and inference with clear documentation for each function and its arguments
 
 inst/extdata: contains the mesh files for the bunny. Load it like so, after installing the package: 
 
@@ -87,7 +87,10 @@ coords = sample_points_mesh(mesh = bunny, npoints = nsamp)
 tau2 = 1
 nu = 2
 
-gp_sample = rnorm(nsamp, 10 * (sin(3 * pi * coords$points[,1]) + sin(3 * pi * coords$points[,2]) + sin(3 * pi * coords$points[,3])), tau2)
+gp_sample = rnorm(nsamp, 10 * (sin(3 * pi * coords$points[,1]) +
+                                sin(3 * pi * coords$points[,2]) +
+                                  sin(3 * pi * coords$points[,3])), tau2)
+# center the truth
 gp_sample = gp_sample - mean(gp_sample)
 
 
@@ -183,7 +186,6 @@ plot_mesh(mesh = bunny, mesh_obj = bunny_gradients$gp_grad_est_obj)
 #########
 # Truth #
 #########
-# Truth
 # Tangent vector field
 mesh = bunny
 mesh_norm  = vcgUpdateNormals(mesh)
@@ -211,7 +213,7 @@ v1_grid_idx = F[grid$tri_idx, 1]
 v2_grid_idx = F[grid$tri_idx, 2]
 v3_grid_idx = F[grid$tri_idx, 3]
 
-# vector field at grid points (Ngrid x 3)
+# vector field at grid points (N_grid x 3)
 V_grid = u_grid * V_vert[v1_grid_idx, , drop = FALSE] +
   v_grid * V_vert[v2_grid_idx, , drop = FALSE] +
   w_grid * V_vert[v3_grid_idx, , drop = FALSE]
@@ -224,7 +226,7 @@ N_grid = u_grid * V_raw[v1_grid_idx, , drop = FALSE] +
 N_grid = N_grid/sqrt(rowSums(N_grid^2))
 
 
-# True Gradient
+# True Gradient in Ambient space
 grad_m_grid = cbind(30 * pi * cos(3 * pi * grid$points[,1]),
                      30 * pi * cos(3 * pi * grid$points[,2]),
                      30 * pi * cos(3 * pi * grid$points[,3]))  # Ngrid x 3
@@ -244,10 +246,14 @@ gp_grad_true_obj = list(points = grid$points,
 # Not in R-package
 plot_mesh(mesh = bunny, mesh_obj = gp_grad_true_obj)
 
-final = cbind(true_grad, bunny_gradients$grad_ci) # get grad_ci from estimated_bunny_grads_...
-sum(apply(final, 1, function(x) ifelse(x[1] >= x[3] & x[1] <= x[4], 1, 0)))/nrow(grid$points) * 100 # 200 eigen pairs:: 93%; 300 eigen pairs:: 95.25%
+final = cbind(true_grad, bunny_gradients$grad_ci)
+###########################
+# Coverage probability
+# 200 eigen pairs:: 93%; 300 eigen pairs:: 95.25%
+sum(apply(final, 1, function(x) ifelse(x[1] >= x[3] & x[1] <= x[4], 1, 0)))/nrow(grid$points) * 100 
 colnames(final) = c("true" ,"est", "lower_ci", "upper_ci")
 
+# Compare True v. Estimated
 ggplot(final, aes(x = est, y = true)) +
   geom_point(color = "black") +
   geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), fill = "grey70", alpha = 0.5,
@@ -266,6 +272,5 @@ ggplot(final, aes(x = est, y = true)) +
   )
 
 ```
-For questions and bugs, please reach out to: [Email Me](mailto:ah3758@drexel.edu)
 
 
