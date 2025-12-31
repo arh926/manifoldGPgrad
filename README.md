@@ -45,7 +45,7 @@ Below is an example working script that helps in reproducing the analysis for th
 #   idx  <- cut((interp - min(interp))/(max(interp) - min(interp)), 100)
 # 
 #   open3d()
-#   shade3d(bunny, color = cols[idx], meshColor = "vertices")
+#   shade3d(mesh, color = cols[idx], meshColor = "vertices")
 # 
 # }
 # Note:: Must set options BEFORE loading the rgl package
