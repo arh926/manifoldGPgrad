@@ -136,6 +136,7 @@ final_y = cbind(true = gp_sample,
                 upper_ci = apply(mc_sp$z, 2, quantile, probs = 0.975) + quantile(mc_sp$beta0, probs = 0.975))
 # y_sd = apply(y_mcmc, 2, sd)
 
+# Compare True v. Estimated: Process
 ggplot(final_y, aes(x = est, y = true)) +
   geom_point(color = "black") +
   geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), fill = "grey70", alpha = 0.5,
@@ -258,7 +259,7 @@ final = cbind(true_grad, bunny_gradients$grad_ci)
 sum(apply(final, 1, function(x) ifelse(x[1] >= x[3] & x[1] <= x[4], 1, 0)))/nrow(grid$points) * 100 
 colnames(final) = c("true" ,"est", "lower_ci", "upper_ci")
 
-# Compare True v. Estimated
+# Compare True v. Estimated: Gradients
 ggplot(final, aes(x = est, y = true)) +
   geom_point(color = "black") +
   geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), fill = "grey70", alpha = 0.5,
