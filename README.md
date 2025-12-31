@@ -62,7 +62,11 @@ require(Matrix)
 require(manifoldGPgrad)
 
 
-# Read the Stanford Bunny
+############################
+# Load the Stanford Bunny  #
+############################
+# Replace bun_zipper_res4.ply with bun_zipper_res3.ply or bun_zipper_res2.ply for higher resolution
+# WARNING: Computation of Laplacian and Eigenvalues take longer with higher resolution
 bunny_path = system.file("extdata", "bun_zipper_res4.ply", package = "manifoldGPgrad")
 bunny = vcgPlyRead(bunny_path, updateNormals = TRUE)
 n = ncol(bunny$vb); n
@@ -104,6 +108,8 @@ gp_obj = list(points = coords$points,
 
 # Not in R-package
 plot_mesh(mesh = bunny, mesh_obj = gp_obj)
+points3d(gp_obj$points, col = "red")
+view3d()
 
 mc_sp = bayes_sp_manifold(mesh = bunny,
                           lambda = lambda_k,
@@ -165,7 +171,7 @@ gp_obj = list(points = coords$points,
               bary = coords$bary)
 # Not in R-package
 plot_mesh(mesh = bunny, mesh_obj = gp_obj)
-
+view3d()
 
 #######################
 # Gradient Estimation #
@@ -186,6 +192,7 @@ grad_est = bunny_gradients$grad_ci[,1]
 
 # Not in R-package
 plot_mesh(mesh = bunny, mesh_obj = bunny_gradients$gp_grad_est_obj)
+view3d()
 
 #########
 # Truth #
@@ -254,6 +261,7 @@ gp_grad_true_obj = list(points = grid$points,
                         bary = grid$bary)
 # Not in R-package
 plot_mesh(mesh = bunny, mesh_obj = gp_grad_true_obj)
+view3d()
 
 final = cbind(true_grad, bunny_gradients$grad_ci)
 ###########################
