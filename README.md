@@ -34,6 +34,9 @@ Below is an example working script that helps in reproducing the analysis for th
 ############################################
 # A plotting function to visualize results #
 ############################################
+# Run this function before proceeding
+# Make sure you have `rgl` installed:
+# install.packages("rgl")
 # plot_mesh <- function(mesh = NULL,
 #                       mesh_obj = NULL,
 #                       ncolors = 11,
