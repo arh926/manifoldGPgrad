@@ -23,7 +23,7 @@ gradient_manifold<- function(mesh = NULL,
                              d = 2, # manifold dimension
                              Vfield = NULL){ # should be n_triangles x 3
   if(is.null(Vfield)){
-    cat("Using x-axis as reference to generate vector field", "\n")
+    cat("Vfield argument is NULL, no vector field provided! Using x-axis as reference to generate vector field", "\n")
     Vcoords = t(mesh$vb[1:3, ])
     F = t(mesh$it)
     ref = c(1, 0, 0) # x-axis
@@ -83,8 +83,8 @@ gradient_manifold<- function(mesh = NULL,
                       nu = nu, alpha = alpha.mc[i.mcmc], d = d,
                       cor = FALSE)
 
-    R = R + diag(nrow(R)) # affected due to scaling
-    R.inv = chol2inv(chol(R))
+    R.inv = try(chol2inv(chol(R)), silent = TRUE)
+    if("try-error" %in% class(R.inv)) R.inv = chol2inv(chol(R + diag(nrow(R))))
 
     for (j in 1:ngrid){
       idx_f = F[grid$tri_idx[j], ]

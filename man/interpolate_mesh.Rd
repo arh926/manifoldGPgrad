@@ -6,6 +6,7 @@
 \usage{
 interpolate_mesh(
   mesh = NULL,
+  L_sym = NULL,
   sample = NULL,
   tau_noise = 0.01,
   lambda_smooth = 0.01,
@@ -14,6 +15,8 @@ interpolate_mesh(
 }
 \arguments{
 \item{mesh}{a mesh in polygon file format imported using `vcgPlyRead()` of class `mesh3d`.}
+
+\item{L_sym}{optional; the cotangent Laplacian, if not provided then, is calculated in the function but, takes longer.}
 
 \item{sample}{a list containing function values, IDs of triangle vertices for observed locations, barycentric coordinates (obtained from `sample_points_mesh()`)}
 
