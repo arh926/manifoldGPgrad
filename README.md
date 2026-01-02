@@ -58,12 +58,14 @@ Below is an example working script that helps in reproducing the analysis for th
 options(rgl.useNULL = TRUE)
 options(rgl.printRglwidget = TRUE)
 
+# install.packages(c("Rvcg", "rgl", "ggplot2", "Matrix"), dependencies = TRUE)
+# devtools::install_github("arh926/manifoldGPgrad")
+
 require(Rvcg)
 require(rgl)
 require(ggplot2)
 require(Matrix)
 require(manifoldGPgrad)
-
 
 ############################
 # Load the Stanford Bunny  #
