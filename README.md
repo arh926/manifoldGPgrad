@@ -39,17 +39,18 @@ Below is an example working script that helps in reproducing the analysis for th
 # Run this function before proceeding
 # Make sure you have `rgl` installed:
 # install.packages("rgl")
-# plot_mesh <- function(mesh = NULL,
+# plot_mesh <- function(mesh = NULL, L_sym = NULL,
 #                       mesh_obj = NULL,
 #                       ncolors = 11,
 #                       palette = "Spectral"){
 # 
-#   interp = as.numeric(interpolate_mesh(mesh = mesh, sample = mesh_obj, method = "spline"))
+#   interp = as.numeric(interpolate_mesh(mesh = mesh, sample = mesh_obj, method = "spline", L_sym = L_sym))
 #   cols = colorRampPalette(RColorBrewer::brewer.pal(ncolors, palette))(100)
 #   # scale [0, 1]
 #   idx  <- cut((interp - min(interp))/(max(interp) - min(interp)), 100)
 # 
 #   open3d()
+#   view3d()
 #   shade3d(mesh, color = cols[idx], meshColor = "vertices")
 # 
 # }
@@ -109,9 +110,8 @@ gp_obj = list(points = coords$points,
               bary = coords$bary)
 
 # Not in R-package
-plot_mesh(mesh = bunny, mesh_obj = gp_obj)
+plot_mesh(mesh = bunny, mesh_obj = gp_obj, L_sym = L_sym)
 points3d(gp_obj$points, col = "red")
-view3d()
 
 mc_sp = bayes_sp_manifold(mesh = bunny,
                           lambda = lambda_k,
@@ -173,7 +173,6 @@ gp_obj = list(points = coords$points,
               bary = coords$bary)
 # Not in R-package
 plot_mesh(mesh = bunny, mesh_obj = gp_obj)
-view3d()
 
 #######################
 # Gradient Estimation #
@@ -193,8 +192,7 @@ bunny_gradients = gradient_manifold(mesh = bunny, coords = coords,
 grad_est = bunny_gradients$grad_ci[,1]
 
 # Not in R-package
-plot_mesh(mesh = bunny, mesh_obj = bunny_gradients$gp_grad_est_obj)
-view3d()
+plot_mesh(mesh = bunny, mesh_obj = bunny_gradients$gp_grad_est_obj, L_sym = L_sym)
 
 #########
 # Truth #
@@ -262,8 +260,7 @@ gp_grad_true_obj = list(points = grid$points,
                         tri_idx = grid$tri_idx,
                         bary = grid$bary)
 # Not in R-package
-plot_mesh(mesh = bunny, mesh_obj = gp_grad_true_obj)
-view3d()
+plot_mesh(mesh = bunny, mesh_obj = gp_grad_true_obj, L_sym = L_sym)
 
 final = cbind(true_grad, bunny_gradients$grad_ci)
 ###########################
