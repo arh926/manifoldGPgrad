@@ -17,7 +17,7 @@ Install the package like so:
 ``` r
 devtools::install_github("arh926/manifoldGPgrad")
 ```
-Below are some examples of what it generates.
+Below are some figures showing comparisons of estimated derivtaives on the 2-sphere and the Stanford Bunny obtained using `manifoldGPgrad`. The second plot shows vector fields in the tangent space of the Bunny which is used to obtain directional derivatives.
 
 ## Spatial Process Modeling and inference for gradients on the 2-sphere 
 <img width="3228" height="1275" alt="sphere_sim-combined_scale" src="https://github.com/user-attachments/assets/f1c6f6ee-04bf-4e5d-a346-55d6c2555c07" />
