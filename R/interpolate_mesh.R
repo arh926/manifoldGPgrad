@@ -4,6 +4,7 @@
 #'
 #' @param mesh a mesh in polygon file format imported using `vcgPlyRead()` of class `mesh3d`.
 #' @param sample a list containing function values, IDs of triangle vertices for observed locations, barycentric coordinates (obtained from `sample_points_mesh()`)
+#' @param L_sym optional; the cotangent Laplacian, if not provided then, is calculated in the function but, takes longer.
 #' @param tau_noise optional; regularization parameter for heat-kernel (should be small defaults to 0.01)
 #' @param lambda_smooth optional; penalty parameter for spline (should be small defaults to 0.001)
 #' @param method choice between: heat kernel and spline
