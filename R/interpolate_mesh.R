@@ -7,21 +7,26 @@
 #' @param tau_noise optional; regularization parameter for heat-kernel (should be small defaults to 0.01)
 #' @param lambda_smooth optional; penalty parameter for spline (should be small defaults to 0.001)
 #' @param method choice between: heat kernel and spline
+#' @importFrom Matrix Diagonal Cholesky solve
 #' @returns a vector of interpolated realizations on the mesh
 #' @keywords interpolate_mesh
 #' @author Aritra Halder <aritra.halder@drexel.edu>
 #' @export
-interpolate_mesh <- function(mesh = NULL,
+interpolate_mesh <- function(mesh = NULL, L_sym = NULL,
                              sample = NULL,
                              tau_noise = 0.01, # set for heat kernel
                              lambda_smooth = 1e-2, # set for spline
                              method = c("heat kernel", "spline")){
   F = t(mesh$it)
 
-  L_cot = laplacian_cotangent(mesh)
-  L = (L_cot + t(L_cot)) / 2
+  if(is.null(L_sym)){
+    L_cot = laplacian_cotangent(mesh)
+    L_sym = (L_cot + t(L_cot)) / 2
 
-  n = nrow(L)
+    n = nrow(L_sym)
+  }
+
+  n = nrow(L_sym)
 
   v1_idx = F[sample$tri_idx,1]
   v2_idx = F[sample$tri_idx,2]
@@ -51,13 +56,16 @@ interpolate_mesh <- function(mesh = NULL,
   f_vert[obs_mask] = f_vert[obs_mask] / wt_vert[obs_mask]
 
   if(method == "heat kernel"){
-    u_hat = solve(diag(n) + tau_noise * L, f_vert)
+    A = Diagonal(n) + tau_noise * L_sym
+    R = Cholesky(A)
+    u_hat = solve(R, f_vert)
   }else if(method == "spline"){
-    W = diag(wt_vert)
-    A = lambda_smooth * L + W
+    W = Diagonal(x = wt_vert)
+    A = lambda_smooth * L_sym + W
     rhs = W %*% f_vert
+    R = Cholesky(A)
 
-    u_hat = solve(A, rhs)
+    u_hat = solve(R, rhs)
   }
   return(u_hat = u_hat)
 }
