@@ -30,7 +30,7 @@ Below are some figures showing comparisons of estimated derivtaives on the 2-sph
 ## Spatial Process Modeling and inference for gradients on the Stanford Bunny
 <img width="2710" height="1275" alt="bunny_sim-combined_scale" src="https://github.com/user-attachments/assets/f3d16059-1eef-4ff7-9f9c-62c7a8158152" />
 
-Below is an example working script that helps in reproducing the analysis for the Stanford Bunny. Estimated run-time is <1 hour. The 2-sphere works similarly.
+Below is an example working script that helps in reproducing the analysis for the Stanford Bunny. Estimated run-time is 13.56 mintues on an Apple Mac Mini M4 Pro with 64GB of RAM and 14 cores. The 2-sphere works similarly.
 
 ``` r
 ############################################
