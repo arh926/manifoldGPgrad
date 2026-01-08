@@ -5,6 +5,13 @@ Statistical inference on the rates of change of spatial processes has seen some 
 
 For questions and bugs, please reach out to: [Email Me](mailto:ah3758@drexel.edu).
 
+### Installation
+Install the package like so:
+
+``` r
+devtools::install_github("arh926/manifoldGPgrad")
+```
+
 ### Package Structure:
 R/: contains required subroutines for spatial modeling and inference with clear documentation for each function and its arguments
 
@@ -14,11 +21,7 @@ inst/extdata: contains the mesh files for the bunny. Load it like so, after inst
 bunny_path = system.file("extdata", "bun_zipper_res4.ply", package = "manifoldGPgrad")
 ```
 
-Install the package like so:
 
-``` r
-devtools::install_github("arh926/manifoldGPgrad")
-```
 Below are some figures showing comparisons of estimated derivtaives on the 2-sphere and the Stanford Bunny obtained using `manifoldGPgrad`. The second plot shows vector fields in the tangent space of the Bunny which is used to obtain directional derivatives.
 
 ## Spatial Process Modeling and inference for gradients on the 2-sphere 
