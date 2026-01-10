@@ -23,7 +23,7 @@ gradient_manifold<- function(mesh = NULL,
                              d = 2, # manifold dimension
                              Vfield = NULL){ # should be n_triangles x 3
   if(is.null(Vfield)){
-    cat("Vfield argument is NULL, no vector field provided! Using x-axis as reference to generate vector field", "\n")
+    cat("Vfield argument is NULL, no vector field provided! Using x-axis as reference to generate vector field.", "\n")
     Vcoords = t(mesh$vb[1:3, ])
     F = t(mesh$it)
     ref = c(1, 0, 0) # x-axis
